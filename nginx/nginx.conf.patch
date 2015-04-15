@@ -1,0 +1,19 @@
+*** nginx.conf.old	2015-04-13 05:55:43.747773241 +0000
+--- nginx.conf	2015-04-13 05:54:31.208064204 +0000
+***************
+*** 69,75 ****
+  	##
+  
+  	include /etc/nginx/conf.d/*.conf;
+! 	include /etc/nginx/sites-enabled/*;
+  }
+  
+  
+--- 69,75 ----
+  	##
+  
+  	include /etc/nginx/conf.d/*.conf;
+! 	#include /etc/nginx/sites-enabled/*;
+  }
+  
+  

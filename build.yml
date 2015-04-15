@@ -1,0 +1,46 @@
+- hosts: localhost
+  sudo: yes
+  gather_facts: no
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Install git
+      apt: name=git
+    
+    - name: Install supervisor
+      apt: name=supervisor
+    
+    - name: Install nginx
+      apt: name=nginx
+    
+    - name: Install MySQL
+      apt: name=mysql-server
+      
+    - name: Create nginx app.conf
+      template: src=nginx/app.conf dest=/etc/nginx/conf.d/app.conf
+    
+    - name: Comment out nginx.conf
+      patch: >
+        basedir=.
+        src=nginx/nginx.conf.patch
+        dest=/etc/nginx/nginx.conf
+    
+    - name: Create supervisor conf
+      template: src=supervisor/app.conf dest=/etc/supervisor/conf.d/app.conf
+    
+    - name: Clone xbuild
+      git: repo=https://github.com/tagomoris/xbuild.git dest=/tmp/xbuild
+    
+    - name: Install Perl (and App::cpanminus / Carton)
+      shell: /tmp/xbuild/perl-install 5.20.1 /opt/perl-5.20
+      shell: PATH=/opt/perl-5.20/bin:$PATH cpanm Carton
+    
+    - name: Install dependencies for SampleApp
+      shell: >
+        PATH=/opt/perl-5.20/bin:$PATH carton install
+        chdir=/vagrant/SampleApp
+    
+    - name: Restart service
+      service: name=nginx state=restarted enabled=yes
+      service: name=supervisor state=restarted enabled=yes
+

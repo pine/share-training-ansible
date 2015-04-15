@@ -1,0 +1,6 @@
+- hosts: localhost
+  connection: local
+  sudo: yes
+  tasks:
+    - name: Hello, Ansible!
+      shell: echo 'Hello, Ansible!' > /tmp/ansible.txt
